@@ -1,0 +1,22 @@
+services:
+    monitor:
+        build:
+            context: .
+            dockerfile: dockerfile
+        container_name: monitor-app
+        image: monitor-app:0.0.1
+        env_file:
+            - secrets.env
+        environment:
+            USER_AGENT: Monitor-apps
+            INTERVALO: 5
+            SITE_LENTO: 3
+            TIMEOUT: 15
+            MAX_FALHAS: 3
+            MAX_FALHAS_HIST: 3
+            TEMPO_MAX_HIST: 600
+            WEBHOOK: ${WEBHOOK}
+        volumes:
+            - ./entrypoint.sh:/usr/local/bin/entrypoint.sh
+            - ./sites.conf:/root/sites.conf
+            - ./log:/root/log
