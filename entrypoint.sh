@@ -16,7 +16,7 @@
 declare -A SITES # Lista de sites
 declare -A ERROS # Sites com erro
 declare -A LENTOS # Sites lentos
-declare -A HIST_PROBLEMAS # Histórico de problemas
+# declare -A HIST_PROBLEMAS # Histórico de problemas
 ARQUIVO_SITES="sites.conf"
 PRIMEIRA_EXECUCAO="N"
 LINHA="---------------------"
@@ -81,6 +81,9 @@ enviar-cartao() {
     elif [[ "$3" == "AMARELO" ]]
     then
         COR=16776960
+    elif [[ "$3" == "LARANJA" ]]
+    then
+        COR=15105570
     elif [[ "$3" == "VERMELHO" ]]
     then
         COR=16711680
@@ -183,13 +186,13 @@ do
             # Site com tempo de resposta alto
             else
                 ((LENTOS["$SITE"] += 1))
-                ((HIST_PROBLEMAS["$SITE"] += 1))
+                # ((HIST_PROBLEMAS["$SITE"] += 1))
             fi
         
         # Erro ao acessar site
         else
             ((ERROS["$SITE"] += 1))
-            ((HIST_PROBLEMAS["$SITE"] += 1))
+            # ((HIST_PROBLEMAS["$SITE"] += 1))
         fi
 
         # Site lento
@@ -199,7 +202,7 @@ do
             MENSAGEM="${DATA}\nSite lento: $SITE\n${URL}"
             enviar-cartao "Site lento" "$MENSAGEM" "LARANJA" &
             exibir-info "$MENSAGEM"
-            HIST_PROBLEMAS["$SITE"]=0
+            # HIST_PROBLEMAS["$SITE"]=0
         fi
 
         # Site inacessível
@@ -209,18 +212,18 @@ do
             MENSAGEM="${DATA}\nSite inacessível: $SITE\n${URL}"
             enviar-cartao "Site inacessível" "$MENSAGEM" "VERMELHO" &
             exibir-info "$MENSAGEM"
-            HIST_PROBLEMAS["$SITE"]=0
+            # HIST_PROBLEMAS["$SITE"]=0
         fi
 
         # Site com histórico ruim
-        if (( HIST_PROBLEMAS[$SITE] == MAX_FALHAS_HIST + 1 ))
-        then
-            URL="https://${SITES[$SITE]}"
-            MENSAGEM="${DATA}\nSite com problemas: $SITE\n${URL}"
-            enviar-cartao "Site com histórico ruim" "$MENSAGEM" "AMARELO" &
-            exibir-info "$MENSAGEM"
-            HIST_PROBLEMAS["$SITE"]=0
-        fi
+        # if (( HIST_PROBLEMAS[$SITE] == MAX_FALHAS_HIST + 1 ))
+        # then
+        #     URL="https://${SITES[$SITE]}"
+        #     MENSAGEM="${DATA}\nSite com problemas: $SITE\n${URL}"
+        #     enviar-cartao "Site com histórico ruim" "$MENSAGEM" "AMARELO" &
+        #     exibir-info "$MENSAGEM"
+        #     # HIST_PROBLEMAS["$SITE"]=0
+        # fi
 
     done
 
@@ -237,10 +240,10 @@ do
     if (( $(date +"%s") - TIMESTAMP_INICIO_HIST > TEMPO_MAX_HIST ))
     then
         # Zera o histórico dos sites
-        for SITE in "${!SITES[@]}"
-        do
-            HIST_PROBLEMAS["$SITE"]=0
-        done
+        # for SITE in "${!SITES[@]}"
+        # do
+        #     HIST_PROBLEMAS["$SITE"]=0
+        # done
 
         # Redefine o tempo de início do histórico
         TIMESTAMP_INICIO_HIST=$(date +"%s")

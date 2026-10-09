@@ -2,20 +2,27 @@
 
 Este projeto cria um contêiner que monitora URLs e envia mensagens para um canal do Discord sobre erros ou lentidão de acesso.
 
-Na inicialização do container, o script `entrypoint.sh` é executado, o qual utiliza o utilitário `curl` para realizar o monitoramento das URLs definidas no arquivo `sites.conf`.
+O projeto foi testado no `Docker v4.91.0`. Na inicialização do container, o script `entrypoint.sh` é executado, o qual utiliza o utilitário `curl` para realizar o monitoramento das URLs definidas no arquivo `sites.conf`.
 
 No arquivo `compose.yaml` estão as variáveis utilizadas na configuração do script, como intervalo de monitoramento e número máximo de falhas permitidas (antes de enviar uma mensagem).
 
-## Iniciar container
+## Gerar a imagem
 
-Se a imagem já foi gerada
+Gerar imagem
 ```
-docker compose up
+docker build --no-cache -t monitor-apps:0.0.1 .
 ```
 
-Se a imagem não foi gerada
+## Iniciar container com docker compose
+
+Gerar e executar imagem
 ```
 docker compose up --build
+```
+
+Apenas executar imagem
+```
+docker compose up
 ```
 
 ## Logs
