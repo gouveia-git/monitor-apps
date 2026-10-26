@@ -3,12 +3,5 @@ services:
         build:
             context: .
             dockerfile: dockerfile
-        container_name: monitor-app
-        image: monitor-apps:0.0.1
-        env_file:
-            - config.env
-            - secrets.env
-        volumes:
-            - ./entrypoint.sh:/usr/local/bin/entrypoint.sh
-            - ./sites.conf:/root/sites.conf
-            - ./log:/root/log
+        container_name: monitor-apps
+        image: monitor-apps:1.0.0

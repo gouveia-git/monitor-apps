@@ -1,9 +1,12 @@
-[
-    {
-        "nome": "",
-        "url": "",
-        "grupo": null,
-        "maximoFalhas": null,
-        "timeout": null
-    }
-]
+{
+    "sites": [
+        {
+            "nome": "Portal",
+            "url": "https://www.trt16.jus.br",
+            "grupo": null,
+            "maximoFalhas": null,
+            "timeout": null
+        }
+    ]
+    
+}
