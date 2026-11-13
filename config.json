@@ -1,3 +1,5 @@
 {
+    "userAgent": "Monitor-apps",
+    "intervalo": 5,
     "timeout": 10
 }

@@ -3,8 +3,8 @@ from datetime import datetime
 import json
 import requests
 
+ARQUIVO_CONFIG = "config.json"
 ARQUIVO_SITES = "sites.json"
-TIMEOUT = 10
 
 # FUNÇÕES ---------------------------------------
 
@@ -14,22 +14,23 @@ def ler_json(nome_arquivo):
         with open(nome_arquivo, "r", encoding="utf-8") as arquivo_json:
             dados = json.load(arquivo_json)
         return dados
-    except:
-        print("Erro ao ler arquivo JSON.")
+    except Exception as erro:
+        print("Erro ao ler arquivo JSON:", erro)
         return False
 
-def verificar_url(url, timeout = TIMEOUT):
+def verificar_url(url, timeout = None):
+
+    if(timeout is None):
+        timeout = CONFIG["timeout"]
 
     try:
         tempo_inicio = time.perf_counter()
-
-        resposta = requests.get(url, timeout = timeout)
-
-        tempo = (time.perf_counter() - tempo_inicio)
+        resposta = requests.get(url, headers = HEADERS, timeout = timeout)
+        duracao_requisicao = (time.perf_counter() - tempo_inicio)
 
         return {
             "status": resposta.status_code,
-            "tempo": tempo
+            "duracao": duracao_requisicao
         }
 
     except requests.RequestException as erro:
@@ -40,7 +41,13 @@ def verificar_url(url, timeout = TIMEOUT):
 
 if __name__ == "__main__":
 
+    CONFIG = ler_json(ARQUIVO_CONFIG)
     sites = ler_json(ARQUIVO_SITES)["sites"]
+
+    # Cabeçalho usado nas requisições
+    HEADERS = {
+        "User-Agent": (CONFIG["userAgent"])
+    }
 
     while True:
         for site in sites:
@@ -49,6 +56,6 @@ if __name__ == "__main__":
             print("Site:", site["nome"])
             print("Status:", resposta["status"])
             print("Hora:", hora)
-            print(f'Tempo: {resposta["tempo"]:.3f} seg')
+            print(f'Duração: {resposta["duracao"]:.3f} seg')
             print("-" * 20)
-        time.sleep(2)
+        time.sleep(CONFIG["intervalo"])

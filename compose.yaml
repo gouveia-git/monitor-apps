@@ -5,3 +5,7 @@ services:
             dockerfile: dockerfile
         container_name: monitor-apps
         image: monitor-apps:1.0.0
+        volumes:
+            - ./main.py:/app/main.py
+            - ./config.json:/app/config.json
+            - ./sites.json:/app/sites.json
